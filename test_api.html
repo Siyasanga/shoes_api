@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Testing API</title>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <button id="test" type="button" name="button">TEST</button>
+  <div class="display">
+
+  </div>
+</body>
+<script type="text/javascript">
+var stock = [
+  {
+    brand:"Bronx",
+    color:"black",
+    price:599,
+    size:["5","6","10"],
+    img:"bronx/black.jpg"
+  },
+  {
+    brand:"Jimmy",
+    color:"pink",
+    price:2499,
+    size:["6","7","7","7","8"],
+    img:"jimmy/pink.jpg"
+  },
+  {
+    brand:"Gucci",
+    color:"blue",
+    price:3499,
+    size:["7","8","10"],
+    img:"gucci/blue.jpg"
+  },
+  {
+    brand:"Converse",
+    color:"black",
+    price:899,
+    size:["1","2","3","7","4","10"],
+    img:"converse/black.jpg"
+  },
+  {
+    brand:"Gucci",
+    color:"red",
+    price:3499,
+    size:["6","7","10"],
+    img:"gucci/red.jpg"
+  },
+  {
+    brand:"Converse",
+    color:"blue",
+    price:899,
+    size:["4","10"],
+    img:"converse/blue.jpg"
+  },
+  {
+    brand:"Converse",
+    color:"brown",
+    price:899,
+    size:["1","10"],
+    img:"converse/brown.jpg"
+  },
+  {
+    brand:"Converse",
+    color:"green",
+    price:899,
+    size:["1","2","3","4","10"],
+    img:"converse/green.jpg"
+  },
+  {
+    brand:"Jimmy",
+    color:"white",
+    price:2499,
+    size:["6","7","7","7","8"],
+    img:"jimmy/white.jpg"
+  },
+  {
+    brand:"Bronx",
+    color:"cream",
+    price:599,
+    size:["10"],
+    img:"bronx/cream.jpg"
+  },
+  {
+    brand:"Bronx",
+    color:"white",
+    price:599,
+    size:["6","7","10"],
+    img:"bronx/white.jpg"
+  },
+  {
+    brand:"Gucci",
+    color:"cream",
+    price:3499,
+    size:["6","7"],
+    img:"gucci/cream.jpg"
+  },
+  {
+    brand:"Converse",
+    color:"pink",
+    price:899,
+    size:["1","2","7","10"],
+    img:"converse/pink.jpg"
+  },
+  {
+    brand:"Converse",
+    color:"purple",
+    price:899,
+    size:["3","4","10"],
+    img:"converse/purple.jpg"
+  },
+  {
+    brand:"Converse",
+    color:"red",
+    price:899,
+    size:["1","2","4","10"],
+    img:"converse/red.jpg"
+  },
+  {
+    brand:"Jimmy",
+    color:"sax",
+    price:2499,
+    size:["6","7","7","7","8"],
+    img:"jimmy/sax.jpg"
+  },
+  {
+    brand:"Converse",
+    color:"white",
+    price:899,
+    size:["1","2","3","4","10"],
+    img:"converse/white.jpg"
+  },
+  {
+    brand:"Converse",
+    color:"yellow",
+    price:899,
+    size:["1","2","3","4","7","8","10"],
+    img:"converse/yellow.jpg"
+  },
+  {
+    brand:"Converse",
+    color:"black",
+    price:1099,
+    size:["1","2","3","6","7","4","10"],
+    img:"converse/allblack.jpg"
+  },
+  {
+    brand:"Fabiani",
+    color:"brown",
+    price:2399,
+    size:["6","7","8","10"],
+    img:"fabiani/brown.jpg"
+  },
+  {
+    brand:"Fabiani",
+    color:"maroon",
+    price:2399,
+    size:["6","7","8","10"],
+    img:"fabiani/maroon.jpg"
+  },
+  {
+    brand:"Fabiani",
+    color:"white",
+    price:2399,
+    size:["6","7","8","10"],
+    img:"fabiani/white.jpg"
+  },
+  {
+    brand:"Jimmy",
+    color:"black",
+    price:2499,
+    size:["6","7"],
+    img:"jimmy/black.jpg"
+  },
+  {
+    brand:"Gucci",
+    color:"white",
+    price:3499,
+    size:["6","7"],
+    img:"gucci/white.jpg"
+  },
+  {
+    brand:"Gucci",
+    color:"black",
+    price:3499,
+    size:["6","7","8","10"],
+    img:"gucci/black.jpg"
+  },
+  {
+    brand:"Gucci",
+    color:"brown",
+    price:3499,
+    size:["6","7","8","10"],
+    img:"gucci/brown.jpg"
+  }];
+  stock.forEach(function(current) {
+    var shoe = {};
+    
+  });
+  $("#test").click(function() {
+        $.ajax({
+          url: "http://localhost:3000/api/shoes",
+          type: "get"
+        }).done(function(result) {
+            console.log(result);
+          });
+        })
+  $("#test").click(function() {
+        $.ajax({
+          url: "http://localhost:3000/api/shoes/sold/100",
+          type: "post",
+          data:{"amount":2}
+        }).done(function(result) {
+          console.log("I went to the server ke");
+            console.log(result);
+          });
+        })
+</script>
+
+</html>

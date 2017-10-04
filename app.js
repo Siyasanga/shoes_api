@@ -2,7 +2,19 @@ const express = require('express');
 var database = require('./database');
 const body = require('body-parser');
 var app = express();
-app.use(body.json());
+app.use(body.urlencoded({
+  extended:false
+}));
+// app.use(body.json());
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin","*");
+  res.header("Access-Control-Allow-Headers","Origin, X-requested-With, Content-Type, Accept");
+  if(req.method === "OPTIONS"){
+    res.header("Access-Control-Allow-Methods","PUT,POST,DELETE");
+    return res.status(200).json({});
+  }
+  next();
+});
 // GET all the shoe stock
 app.get("/api/shoes",function(req, res) {
   database.find({},null,{sort:{brand:1}},function(err, shoes) {
@@ -39,7 +51,7 @@ app.post("/api/shoes/sold/:shoeId",function(req, res) {
   console.log("Shoe ID: "+req.params.shoeId);
   console.log(req.body);
   var amount = req.body.amount;
-  database.findOneAndUpdate({id:req.params.shoeId},
+  database.findOneAndUpdate({_id:req.params.shoeId},
                             {$inc: {in_stock:-amount}},
                             {new:true},
                             function(err, affected) {
@@ -57,7 +69,6 @@ app.post("/api/shoes",function(req, res) {
     else res.json(doc);
   })
 })
-
 // Starting the server
 var port = process.env.PORT || 3000;
 var host = process.env.HOST || "http://localhost";

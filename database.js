@@ -5,7 +5,6 @@ mongoose.connect(mongoURL, function(err) {
   else console.log("Database connection established!");
 });
 var shoeModel = mongoose.model("shoe",{
-  id : Number,
   color : String,
   brand : String,
   price : Number,

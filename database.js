@@ -8,7 +8,8 @@ var shoeModel = mongoose.model("shoe",{
   color : String,
   brand : String,
   price : Number,
-  size : Number,
+  size : String,
+  shoeImgUrl : String,
   in_stock : Number
 });
 module.exports = shoeModel;

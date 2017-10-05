@@ -14,7 +14,7 @@
   </div>
 </body>
 <script type="text/javascript">
-var stock = [
+  var stock = [
   {
     brand:"Bronx",
     color:"black",
@@ -197,11 +197,9 @@ var stock = [
     size:["6","7","8","10"],
     img:"gucci/brown.jpg"
   }];
-  stock.forEach(function(current) {
-    var shoe = {};
-    
-  });
-  $("#test").click(function() {
+
+  $("#test").click(function(e,b) {
+        console.log(e);
         $.ajax({
           url: "http://localhost:3000/api/shoes",
           type: "get"
@@ -211,7 +209,7 @@ var stock = [
         })
   $("#test").click(function() {
         $.ajax({
-          url: "http://localhost:3000/api/shoes/sold/100",
+          url: "http://localhost:3000/api/shoes/sold/59d5ec8aff4aaf39ed09a9e6",
           type: "post",
           data:{"amount":2}
         }).done(function(result) {
@@ -219,6 +217,16 @@ var stock = [
             console.log(result);
           });
         })
+  // var stockPromises = stock.map(function(current) {
+    // var shoe = {};
+    // shoe.color = current.color;
+    // shoe.brand = current.brand;
+    // shoe.price = current.price;
+    // shoe.size = current.size;
+    // shoe.imgUrl = current.img;
+    // shoe.in_stock =
+  // });
+  // console.log(stockPromises);
 </script>
 
 </html>

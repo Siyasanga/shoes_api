@@ -61,9 +61,8 @@ app.post("/api/shoes/sold/:shoeId",function(req, res) {
 }); // end of post
 // Add new shoe to stock
 app.post("/api/shoes",function(req, res) {
-
   var newShoe = new database(req.body);
-  console.log(newShoe);
+  console.log("New shoe saved succesfully:\n"+newShoe);
   newShoe.save(function(err,doc) {
     if(err) console.log("Error saving the new shoe:\n"+err);
     else res.json(doc);

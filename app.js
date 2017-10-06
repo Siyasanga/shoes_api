@@ -62,10 +62,12 @@ app.post("/api/shoes/sold/:shoeId",function(req, res) {
 // Add new shoe to stock
 app.post("/api/shoes",function(req, res) {
   var newShoe = new database(req.body);
-  console.log("New shoe saved succesfully:\n"+newShoe);
   newShoe.save(function(err,doc) {
     if(err) console.log("Error saving the new shoe:\n"+err);
-    else res.json(doc);
+    else {
+      console.log("New shoe saved succesfully:\n"+newShoe);
+      res.json(doc);
+    }
   })
 })
 // Starting the server

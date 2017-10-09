@@ -31,14 +31,33 @@ app.get("/api/shoes/brand/:brandName",function(req, res) {
   });
 });
 // Building a mega search feature
-app.get("/api/shoes/brand/:queryString",function(req, res) {
+app.get("/api/filterShoes/:queryString",function(req, res) {
   // expecting something like: ["Bronx","Gucci","Converse"],["Black","Blue","Pink"],[0,350];
-  var
-  console.log(req.params.brandName);
-  database.find({brand:req.params.brandName},function(err,shoes) {
-    if(err) console.log("Error finding shoes by brand name:\n"+err);
-    else res.json(shoes);
-  });
+  var filteringOptions =  JSON.parse(req.params.queryString);
+  var filteringOptions =  JSON.parse(filteringOptions); // Not a mistake, had to parse it twise to work
+  var queryString = "{"; // recycling the variable name since it does not exist in this context
+  var selectedBrands = '"name":{"$in":'+JSON.stringify(filteringOptions[0])+"}";
+  console.log(selectedBrands);
+  if(filteringOptions[0].length == 0)
+   selectedBrands = "";
+  queryString += selectedBrands;
+  var selectedColors = ", 'color':{'$in':"+JSON.stringify(filteringOptions[1])+"}";
+  if(filteringOptions[1].length == 0)
+    selectedColors = "";
+  queryString += selectedColors;
+  var priceRange = ", 'price':'{$gt':"+filteringOptions[2][0]+","+"''$lt':"+filteringOptions[2][1]+"}";
+  if(filteringOptions[2].length == 0)
+    price = "";
+  queryString += priceRange+"}";
+  queryString = JSON.stringify(queryString);
+  console.log(queryString);
+  console.log(JSON.parse(queryString));
+  // database.shoes.find()
+  // console.log(req.params.brandName);
+  // database.find({brand:req.params.brandName},function(err,shoes) {
+  //   if(err) console.log("Error finding shoes by brand name:\n"+err);
+  //   else res.json(shoes);
+  // });
 });
 // List all shoes for a given size
 app.get("/api/shoes/size/:shoeSize",function(req, res) {

@@ -1,190 +1,7 @@
 var shoeBrands = [];
 var shoeColors = [];
 var filtered = [];
-/*var stock = [
-  {
-    brand:"Bronx",
-    color:"black",
-    price:599,
-    size:["5","6","10"],
-    img:"bronx/black.jpg"
-  },
-  {
-    brand:"Jimmy",
-    color:"pink",
-    price:2499,
-    size:["6","7","7","7","8"],
-    img:"jimmy/pink.jpg"
-  },
-  {
-    brand:"Gucci",
-    color:"blue",
-    price:3499,
-    size:["7","8","10"],
-    img:"gucci/blue.jpg"
-  },
-  {
-    brand:"Converse",
-    color:"black",
-    price:899,
-    size:["1","2","3","7","4","10"],
-    img:"converse/black.jpg"
-  },
-  {
-    brand:"Gucci",
-    color:"red",
-    price:3499,
-    size:["6","7","10"],
-    img:"gucci/red.jpg"
-  },
-  {
-    brand:"Converse",
-    color:"blue",
-    price:899,
-    size:["4","10"],
-    img:"converse/blue.jpg"
-  },
-  {
-    brand:"Converse",
-    color:"brown",
-    price:899,
-    size:["1","10"],
-    img:"converse/brown.jpg"
-  },
-  {
-    brand:"Converse",
-    color:"green",
-    price:899,
-    size:["1","2","3","4","10"],
-    img:"converse/green.jpg"
-  },
-  {
-    brand:"Jimmy",
-    color:"white",
-    price:2499,
-    size:["6","7","7","7","8"],
-    img:"jimmy/white.jpg"
-  },
-  {
-    brand:"Bronx",
-    color:"cream",
-    price:599,
-    size:["10"],
-    img:"bronx/cream.jpg"
-  },
-  {
-    brand:"Bronx",
-    color:"white",
-    price:599,
-    size:["6","7","10"],
-    img:"bronx/white.jpg"
-  },
-  {
-    brand:"Gucci",
-    color:"cream",
-    price:3499,
-    size:["6","7"],
-    img:"gucci/cream.jpg"
-  },
-  {
-    brand:"Converse",
-    color:"pink",
-    price:899,
-    size:["1","2","7","10"],
-    img:"converse/pink.jpg"
-  },
-  {
-    brand:"Converse",
-    color:"purple",
-    price:899,
-    size:["3","4","10"],
-    img:"converse/purple.jpg"
-  },
-  {
-    brand:"Converse",
-    color:"red",
-    price:899,
-    size:["1","2","4","10"],
-    img:"converse/red.jpg"
-  },
-  {
-    brand:"Jimmy",
-    color:"sax",
-    price:2499,
-    size:["6","7","7","7","8"],
-    img:"jimmy/sax.jpg"
-  },
-  {
-    brand:"Converse",
-    color:"white",
-    price:899,
-    size:["1","2","3","4","10"],
-    img:"converse/white.jpg"
-  },
-  {
-    brand:"Converse",
-    color:"yellow",
-    price:899,
-    size:["1","2","3","4","7","8","10"],
-    img:"converse/yellow.jpg"
-  },
-  {
-    brand:"Converse",
-    color:"black",
-    price:1099,
-    size:["1","2","3","6","7","4","10"],
-    img:"converse/allblack.jpg"
-  },
-  {
-    brand:"Fabiani",
-    color:"brown",
-    price:2399,
-    size:["6","7","8","10"],
-    img:"fabiani/brown.jpg"
-  },
-  {
-    brand:"Fabiani",
-    color:"maroon",
-    price:2399,
-    size:["6","7","8","10"],
-    img:"fabiani/maroon.jpg"
-  },
-  {
-    brand:"Fabiani",
-    color:"white",
-    price:2399,
-    size:["6","7","8","10"],
-    img:"fabiani/white.jpg"
-  },
-  {
-    brand:"Jimmy",
-    color:"black",
-    price:2499,
-    size:["6","7"],
-    img:"jimmy/black.jpg"
-  },
-  {
-    brand:"Gucci",
-    color:"white",
-    price:3499,
-    size:["6","7"],
-    img:"gucci/white.jpg"
-  },
-  {
-    brand:"Gucci",
-    color:"black",
-    price:3499,
-    size:["6","7","8","10"],
-    img:"gucci/black.jpg"
-  },
-  {
-    brand:"Gucci",
-    color:"brown",
-    price:3499,
-    size:["6","7","8","10"],
-    img:"gucci/brown.jpg"
-  }];
-*/
+
 //*********************Creating new Stock****************************
 function newStock(name,colors,cost,sizes,url) {
   var newItem = {
@@ -199,18 +16,13 @@ function newStock(name,colors,cost,sizes,url) {
 //********************************
 // Capture new stock from the user
 function createStock() {
-  var brand;
-  var color;
-  var price;
-  var cost;
-  var sizes;
   for(var i = 0; i<shoes.children.length; i++){
     brand = document.querySelector("#brand").value;
     color = document.querySelector("#color").value;
     sizes = document.querySelector("#sizes").value;
     cost = document.querySelector("#image").value;
-    var url =  document.querySelector("#image").value;
-    stock.push(newStock(brand,color,cost,sizes,url));
+    shoeImgUrl =  document.querySelector("#image").value;
+    stock.push(newStock(brand,color,cost,sizes,shoeImgUrl));
   }
   return stock;
 }
@@ -264,56 +76,74 @@ function getOptions(property,cb) {
 // var colorList = getOptions("color"); // This is where all existing shoe colors are stored
 var activeBrands = [];
 var activeColors = [];
-var filtered;
 //*********************Filtering By Brands*************************
-function pullBrands(brand) {
-  filtered = [];
-  if(brand.length !== 0){
-    activeBrands.push(brand);
-  }
-  for(var i=0; i<stock.length; i++){
-    for(var j=0; j<activeBrands.length; j++){
-      if(stock[i].brand == activeBrands[j]){
-        filtered.push(stock[i]);
-      }
-    }
-  }
-  if(activeBrands.length==0){
-    filtered = stock;
-  }
-  document.querySelector(".main").innerHTML = compShoe({shoe:filtered});
-  pullColors("");
-  return filtered;
-}
-//*************************Filtering By Colors*******************************
-function pullColors(color) {
-  results = [];
-  if(color.length !== 0){
-    activeColors.push(color);
-  }
-  var focus = filtered;
-  if(filtered.length ==0){
-    focus = stock;
-  }
-  if(activeColors.length !== 0)
-  for(var i=0; i<focus.length; i++){
-    for(var j=0; j<activeColors.length; j++){
-      if(focus[i].color == activeColors[j]){
-        results.push(focus[i]);
-      }
+function filterShoes() {
+  if(event.srcElement.classList.contains("brand")) {
+    //Capturing selected brands
+    if(event.srcElement.checked){
+      if(activeBrands.indexOf(event.srcElement.value) == -1)
+      activeBrands.push(event.srcElement.value);
+    }else {
+      activeBrands.splice(activeBrands.indexOf(event.srcElement.value),1);
     }
   }
   else {
-    results = filtered;
+    //Capturing selected colors
+    if(event.srcElement.checked){
+      if(activeColors.indexOf(event.srcElement.value) == -1)
+      activeColors.push(event.srcElement.value);
+    }else {
+      activeColors.splice(activeColors.indexOf(event.srcElement.value),1);
+    }
   }
-  document.querySelector(".main").innerHTML = compShoe({shoe:results});
-  return results;
+  console.log(activeColors);
+  // filtered = [];
+  // if(brand.length !== 0){
+  //   activeBrands.push(brand);
+  // }
+  // for(var i=0; i<stock.length; i++){
+  //   for(var j=0; j<activeBrands.length; j++){
+  //     if(stock[i].brand == activeBrands[j]){
+  //       filtered.push(stock[i]);
+  //     }
+  //   }
+  // }
+  // if(activeBrands.length==0){
+  //   filtered = stock;
+  // }
+  // document.querySelector(".main").innerHTML = compShoe({shoe:filtered});
+  // pullColors("");
+  // return filtered;
 }
+//*************************Filtering By Colors*******************************
+// function pullColors(color) {
+//   results = [];
+//   if(color.length !== 0){
+//     activeColors.push(color);
+//   }
+//   var focus = filtered;
+//   if(filtered.length ==0){
+//     focus = stock;
+//   }
+//   if(activeColors.length !== 0)
+//   for(var i=0; i<focus.length; i++){
+//     for(var j=0; j<activeColors.length; j++){
+//       if(focus[i].color == activeColors[j]){
+//         results.push(focus[i]);
+//       }
+//     }
+//   }
+//   else {
+//     results = filtered;
+//   }
+//   document.querySelector(".main").innerHTML = compShoe({shoe:results});
+//   return results;
+// }
 //**************************Removing a Filter******************************
-function remove(value,source) {
-  source.splice(source.indexOf(value),1);
-  return source;
-}
+// function remove(value,source) {
+//   source.splice(source.indexOf(value),1);
+//   return source;
+// }
 function priceFilter() {
   results = [];
   if(document.querySelector("#min").value > document.querySelector("#max").value){
@@ -355,10 +185,15 @@ function priceFilter() {
 // document.querySelector("#min").value = getMin();
 // document.querySelector("#max").value = getMax();
 //*********************Compiling shoe template***************************
-var shoeScript = document.querySelector("#shoe-template").innerHTML;
-var compShoe = Handlebars.compile(shoeScript);
-// var result = compShoe({shoe:stock});
-// document.querySelector(".main").innerHTML+=result;
+// database.shoes.find({},function(err, shoes) {
+//   if(err) console.log("Encountered an error while trying to find all shoes from database:\n"+err);
+//   else {
+//     var shoeScript = document.querySelector("#shoe-template").innerHTML;
+//     var compShoe = Handlebars.compile(shoeScript);
+//     var result = compShoe({shoe:shoes});
+//     document.querySelector(".main").innerHTML+=result;
+//   }
+// });
 //*******************Compiling shoe brands menu*************************
 getOptions("brand",function(result) {
   var menuscript = document.querySelector("#brandOptions").innerHTML;
@@ -367,51 +202,51 @@ getOptions("brand",function(result) {
   document.querySelector(".brands").innerHTML+=menuItem;
 });
 //*******************Compiling shoe colors menu*************************
-getOptions("color",function(result) {
+getOptions("color",function(colors) {
   var colorscript = document.querySelector("#colorOptions").innerHTML;
   var compColor = Handlebars.compile(colorscript);
-  var colorResult = compColor({shoeColor:colorList});
+  var colorResult = compColor({shoeColor:colors});
   document.querySelector(".colors").innerHTML += colorResult;
 });
-//********************Making Brand checkboxes work*********************
-var brandDiv = document.querySelector(".brands");
-brandDiv.addEventListener('click',function () {
-  if(event.srcElement.classList.value == "check") {
-    var status = event.srcElement.checked;
-    if(status){
-        pullBrands(event.srcElement.nextElementSibling.innerHTML);
-    }
-    else {
-      console.log("Deselect");
-      remove(event.srcElement.nextElementSibling.innerHTML,activeBrands);
-      pullBrands("");
-    }
-  }
-},false);
+// //********************Making Brand checkboxes work*********************
+// var brandDiv = document.querySelector(".brands");
+// brandDiv.addEventListener('click',function () {
+//   if(event.srcElement.classList.value == "check") {
+//     var status = event.srcElement.checked;
+//     if(status){
+//         pullBrands(event.srcElement.nextElementSibling.innerHTML);
+//     }
+//     else {
+//       console.log("Deselect");
+//       remove(event.srcElement.nextElementSibling.innerHTML,activeBrands);
+//       pullBrands("");
+//     }
+//   }
+// },false);
 //********************Making color checkboxes work*********************
-var colorDiv = document.querySelector(".colors");
-colorDiv.addEventListener('click',function () {
-  if(event.srcElement.classList.value == "check") {
-    var status = event.srcElement.checked;
-    if(status){
-        pullColors(event.srcElement.nextElementSibling.innerHTML);
-    }
-    else {
-      console.log("Deselect");
-      remove(event.srcElement.nextElementSibling.innerHTML,activeColors);
-      pullColors("");
-    }
-  }
-},false);
-var min = document.querySelector("#min");
-var max = document.querySelector("#max");
-min.addEventListener("change",function() {
-  priceFilter();
-},false);
-var submit = document.querySelector("#submit");
-submit.addEventListener("click",function() {
-  var copy;
-  if(validateForm()){
-    createStock();
-  }
-});
+// var colorDiv = document.querySelector(".colors");
+// colorDiv.addEventListener('click',function () {
+//   if(event.srcElement.classList.value == "check") {
+//     var status = event.srcElement.checked;
+//     if(status){
+//         pullColors(event.srcElement.nextElementSibling.innerHTML);
+//     }
+//     else {
+//       console.log("Deselect");
+//       remove(event.srcElement.nextElementSibling.innerHTML,activeColors);
+//       pullColors("");
+//     }
+//   }
+// },false);
+// var min = document.querySelector("#min");
+// var max = document.querySelector("#max");
+// min.addEventListener("change",function() {
+//   priceFilter();
+// },false);
+// var submit = document.querySelector("#submit");
+// submit.addEventListener("click",function() {
+//   var copy;
+//   if(validateForm()){
+//     createStock();
+//   }
+// });

@@ -54,8 +54,8 @@
             <script id="brandOptions" type="text/x-handlebars-template">
             {{#each shoeBrand}}
             <div class="brandOption">
-              <input class="check" type="checkbox">
-              <label class="Brand">{{this}}</label>
+              <input class="check brand"  onclick="filterShoes()" value="{{this}}" id="{{this}}" type="checkbox">
+              <label for="{{this}}" class="Brand">{{this}}</label>
             </div>
             {{/each}}
             </script>
@@ -64,8 +64,8 @@
             <script id="colorOptions" type="text/x-handlebars-template">
             {{#each shoeColor}}
               <div class="colorOption">
-                <input class="check" type="checkbox">
-                <label class="Color">{{this}}</label>
+                <input class="check" onclick="filterShoes()" value="{{this}}" id="{{this}}" type="checkbox">
+                <label for="{{this}}" class="Color">{{this}}</label>
               </div>
             {{/each}}
             </script>

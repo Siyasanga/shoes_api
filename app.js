@@ -30,6 +30,16 @@ app.get("/api/shoes/brand/:brandName",function(req, res) {
     else res.json(shoes);
   });
 });
+// Building a mega search feature
+app.get("/api/shoes/brand/:queryString",function(req, res) {
+  // expecting something like: ["Bronx","Gucci","Converse"],["Black","Blue","Pink"],[0,350];
+  var
+  console.log(req.params.brandName);
+  database.find({brand:req.params.brandName},function(err,shoes) {
+    if(err) console.log("Error finding shoes by brand name:\n"+err);
+    else res.json(shoes);
+  });
+});
 // List all shoes for a given size
 app.get("/api/shoes/size/:shoeSize",function(req, res) {
   console.log(req.params.shoeSize);

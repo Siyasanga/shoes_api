@@ -15,11 +15,35 @@ app.use(function(req, res, next) {
   }
   next();
 });
+var stock = {}; // This is where all the stock will be stored
+setStock();
+// This function iterates stock to return kinds of a property
+function getOptions(property, stock) {
+  var result = [];
+  for(var i=0; i<stock.length; i++){
+    if(result.indexOf(stock[i][property])==-1){
+      result.push(stock[i][property]);
+    }
+  } // end of loop
+  return result;
+} // End of getOptions()
+function setStock(cb){
+  database.find({},null,{sort:{price:1}},function(err, shoes) {
+    if(err) console.log("Error finding the shoes from the database:\n"+err);
+    else{
+      stock.availBrands = getOptions("brand",shoes);
+      stock.availColors = getOptions("color",shoes);
+      stock.minPrice = shoes[0].price;
+      stock.maxPrice = shoes[shoes.length-1].price;
+      stock.shoes = shoes;
+      if(typeof(cb) == "function") cb(stock); // Passing shoes to the callback
+    }
+  });
+}
 // GET all the shoe stock
 app.get("/api/shoes",function(req, res) {
-  database.find({},null,{sort:{brand:1}},function(err, shoes) {
-    if(err) console.log("Error finding the shoes from the database:\n"+err);
-    else res.json(shoes);
+  setStock(function(stock) {
+    res.json(stock);
   });
 });
 // List all shoes for a given brand
@@ -32,32 +56,23 @@ app.get("/api/shoes/brand/:brandName",function(req, res) {
 });
 // Building a mega search feature
 app.get("/api/filterShoes/:queryString",function(req, res) {
-  // expecting something like: ["Bronx","Gucci","Converse"],["Black","Blue","Pink"],[0,350];
+  // expecting queryString to be like: ["Bronx","Gucci","Converse"],["Black","Blue","Pink"],[0,350];
+  console.log(req.params.queryString);
   var filteringOptions =  JSON.parse(req.params.queryString);
-  var filteringOptions =  JSON.parse(filteringOptions); // Not a mistake, had to parse it twise to work
-  var queryString = "{"; // recycling the variable name since it does not exist in this context
-  var selectedBrands = '"name":{"$in":'+JSON.stringify(filteringOptions[0])+"}";
-  console.log(selectedBrands);
-  if(filteringOptions[0].length == 0)
-   selectedBrands = "";
-  queryString += selectedBrands;
-  var selectedColors = ", 'color':{'$in':"+JSON.stringify(filteringOptions[1])+"}";
-  if(filteringOptions[1].length == 0)
-    selectedColors = "";
-  queryString += selectedColors;
-  var priceRange = ", 'price':'{$gt':"+filteringOptions[2][0]+","+"''$lt':"+filteringOptions[2][1]+"}";
-  if(filteringOptions[2].length == 0)
-    price = "";
-  queryString += priceRange+"}";
-  queryString = JSON.stringify(queryString);
-  console.log(queryString);
-  console.log(JSON.parse(queryString));
-  // database.shoes.find()
-  // console.log(req.params.brandName);
-  // database.find({brand:req.params.brandName},function(err,shoes) {
-  //   if(err) console.log("Error finding shoes by brand name:\n"+err);
-  //   else res.json(shoes);
-  // });
+  selectedBrands = stock.availBrands;
+  if(filteringOptions[0].length !== 0) selectedBrands = filteringOptions[0];
+  selectedColors = stock.availColors;
+  if(filteringOptions[1].length !== 0) selectedColors = filteringOptions[1];
+  priceRange = {"$gt":stock.minPrice, "$lt":stock.maxPrice};
+  console.log(priceRange);
+  if(filteringOptions[2].length !== 0){
+    priceRange.$gt = filteringOptions[2][0];
+    priceRange.$lt = filteringOptions[2][1];
+  }
+  database.find({brand:{$in:selectedBrands}, color:{$in:selectedColors}, price:priceRange},function(err,shoes) {
+    if(err) console.log("Error finding shoes by brand name:\n"+err);
+    else res.json(shoes);
+  });
 });
 // List all shoes for a given size
 app.get("/api/shoes/size/:shoeSize",function(req, res) {
@@ -85,7 +100,7 @@ app.post("/api/shoes/sold/:shoeId",function(req, res) {
                             {new:true},
                             function(err, affected) {
                               if(err) console.log("Error finding and updating shoe by id:\n"+err);
-                              else res.json(affected);
+                              else res.redirect("/api/shoes");
                             });
 }); // end of post
 // Add new shoe to stock
@@ -95,7 +110,7 @@ app.post("/api/shoes",function(req, res) {
     if(err) console.log("Error saving the new shoe:\n"+err);
     else {
       console.log("New shoe saved succesfully:\n"+newShoe);
-      res.json(doc);
+      res.redirect("/api/shoes");
     }
   })
 })

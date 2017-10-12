@@ -1,7 +1,19 @@
-var shoeBrands = [];
-var shoeColors = [];
-var filtered = [];
-
+var compiledBrandOptions = Handlebars.compile(document.querySelector("#brandOptions").innerHTML);
+var compiledColorOptions = Handlebars.compile(document.querySelector("#colorOptions").innerHTML);
+var stockCompiler = Handlebars.compile(document.querySelector("#shoe-template").innerHTML);
+$.ajax({
+  url: "http://localhost:3000/api/shoes",
+  type:"get"
+}).done(function(stock) {
+  document.querySelector("#brands").innerHTML += compiledBrandOptions({shoeBrand:stock.availBrands});
+  document.querySelector("#colors").innerHTML += compiledColorOptions({shoeColor:stock.availColors});
+  document.querySelector("#min").value = stock.minPrice; document.querySelector("#max").value = stock.maxPrice;
+  document.querySelector("#max").min = stock.minPrice;
+  document.querySelector("#min").min = stock.minPrice;
+  document.querySelector("#max").max = stock.maxPrice;
+  document.querySelector("#min").max = stock.maxPrice;
+  document.querySelector(".main").innerHTML += stockCompiler({shoe:stock.shoes});
+})
 //*********************Creating new Stock****************************
 function newStock(name,colors,cost,sizes,url) {
   var newItem = {
@@ -57,27 +69,12 @@ function validateForm() {
 }
 //*****************************************************//
 //******************Getting all property types***********************
-function getOptions(property,cb) {
-  // console.log(cb);
-  var result = [];
-    $.ajax({
-      url: "http://localhost:3000/api/shoes",
-      type: "get"
-    })
-  .done(function(stock) {
-      for(var i=0; i<stock.length; i++){
-        if(result.indexOf(stock[i][property])==-1){
-          result.push(stock[i][property]);
-        }
-      } // end of loop
-      cb(result);
-    });
-} // end of getOptions
-// var colorList = getOptions("color"); // This is where all existing shoe colors are stored
 var activeBrands = [];
 var activeColors = [];
-//*********************Filtering By Brands*************************
+var priceRange = [];
+//*********************Filtering Shoes*************************
 function filterShoes() {
+  console.log(event.srcElement);
   if(event.srcElement.classList.contains("brand")) {
     //Capturing selected brands
     if(event.srcElement.checked){
@@ -86,8 +83,9 @@ function filterShoes() {
     }else {
       activeBrands.splice(activeBrands.indexOf(event.srcElement.value),1);
     }
-  }
-  else {
+    console.log(activeBrands);
+  } // End capturing selected brands
+  else if(event.srcElement.classList.contains("colorFilter")){
     //Capturing selected colors
     if(event.srcElement.checked){
       if(activeColors.indexOf(event.srcElement.value) == -1)
@@ -95,8 +93,19 @@ function filterShoes() {
     }else {
       activeColors.splice(activeColors.indexOf(event.srcElement.value),1);
     }
-  }
-  console.log(activeColors);
+    console.log(activeColors);
+  } // End capturing selected colors
+  else {
+    if(Number(document.querySelector("#min").value) <= Number(document.querySelector("#max").value)){
+      priceRange[0] = document.querySelector("#min").value;
+      priceRange[1] = document.querySelector("#max").value;
+    }
+  } // End capturing price range
+  queryString = JSON.stringify(activeBrands)+","+JSON.stringify(activeColors)+","+JSON.stringify(priceRange);
+  console.log(queryString);
+  // $.ajax({
+  //   url:
+  // });
   // filtered = [];
   // if(brand.length !== 0){
   //   activeBrands.push(brand);
@@ -144,24 +153,24 @@ function filterShoes() {
 //   source.splice(source.indexOf(value),1);
 //   return source;
 // }
-function priceFilter() {
-  results = [];
-  if(document.querySelector("#min").value > document.querySelector("#max").value){
-    console.log(document.querySelector("#min").value);
-    extra = document.querySelector("#max").value;
-    document.querySelector("#max").value = document.querySelector("#min").value;
-    document.querySelector("#min").value = extra;
-  }
-  var focus = pullColors("");
-  for(var i=0; i<focus.length; i++){
-    if(1000 >= min.value && 1000 <= max.value){
-      console.log("Hello");
-      results.push(focus[i]);
-    }
-  }
-  document.querySelector(".main").innerHTML = compShoe({shoe:results});
-  return results;
-}
+// function priceFilter() {
+//   results = [];
+//   if(document.querySelector("#min").value > document.querySelector("#max").value){
+//     console.log(document.querySelector("#min").value);
+//     extra = document.querySelector("#max").value;
+//     document.querySelector("#max").value = document.querySelector("#min").value;
+//     document.querySelector("#min").value = extra;
+//   }
+//   var focus = pullColors("");
+//   for(var i=0; i<focus.length; i++){
+//     if(1000 >= min.value && 1000 <= max.value){
+//       console.log("Hello");
+//       results.push(focus[i]);
+//     }
+//   }
+//   document.querySelector(".main").innerHTML = compShoe({shoe:results});
+//   return results;
+// }
 //***************Getting the Min-price***************************
 // function getMin() {
 //   var min = stock[0].price;
@@ -195,19 +204,19 @@ function priceFilter() {
 //   }
 // });
 //*******************Compiling shoe brands menu*************************
-getOptions("brand",function(result) {
-  var menuscript = document.querySelector("#brandOptions").innerHTML;
-  var compMenu = Handlebars.compile(menuscript);
-  var menuItem = compMenu({shoeBrand:result});
-  document.querySelector(".brands").innerHTML+=menuItem;
-});
-//*******************Compiling shoe colors menu*************************
-getOptions("color",function(colors) {
-  var colorscript = document.querySelector("#colorOptions").innerHTML;
-  var compColor = Handlebars.compile(colorscript);
-  var colorResult = compColor({shoeColor:colors});
-  document.querySelector(".colors").innerHTML += colorResult;
-});
+// getOptions("brand",function(result) {
+//   var menuscript = document.querySelector("#brandOptions").innerHTML;
+//   var compMenu = Handlebars.compile(menuscript);
+//   var menuItem = compMenu({shoeBrand:result});
+//   document.querySelector(".brands").innerHTML+=menuItem;
+// });
+// //*******************Compiling shoe colors menu*************************
+// getOptions("color",function(colors) {
+//   var colorscript = document.querySelector("#colorOptions").innerHTML;
+//   var compColor = Handlebars.compile(colorscript);
+//   var colorResult = compColor({shoeColor:colors});
+//   document.querySelector(".colors").innerHTML += colorResult;
+// });
 // //********************Making Brand checkboxes work*********************
 // var brandDiv = document.querySelector(".brands");
 // brandDiv.addEventListener('click',function () {

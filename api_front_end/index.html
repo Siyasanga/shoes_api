@@ -34,7 +34,7 @@
             <p class="error" style="display:none" id="errSex">Sex is a required field</p>
           </div>
           <div class="inp">
-            <label for="color">Price: R</label>
+            <label for="price">Price: R</label>
             <input type="number" id="price" name="price" placeholder="Enter shoe price" style="width:120px">
             <p class="error" style="display:none" id="errColor">shoe price is a required field</p>
           </div>
@@ -50,7 +50,7 @@
       <div class="aside">
         <h2>Refine results:</h2>
         <div>
-          <li class="brands"><h3>Brands</h3>
+          <li class="brands" id="brands"><h3>Brands</h3>
             <script id="brandOptions" type="text/x-handlebars-template">
             {{#each shoeBrand}}
             <div class="brandOption">
@@ -60,11 +60,11 @@
             {{/each}}
             </script>
           </li>
-          <li class="colors"><h3>Color</h3>
+          <li class="colors" id="colors"><h3>Color</h3>
             <script id="colorOptions" type="text/x-handlebars-template">
             {{#each shoeColor}}
               <div class="colorOption">
-                <input class="check" onclick="filterShoes()" value="{{this}}" id="{{this}}" type="checkbox">
+                <input class="check colorFilter" onclick="filterShoes()" value="{{this}}" id="{{this}}" type="checkbox">
                 <label for="{{this}}" class="Color">{{this}}</label>
               </div>
             {{/each}}
@@ -72,7 +72,7 @@
           </li>
           <li><h3>Price Range</h3>
             <div class="panel">
-              R<input id="min" class="limits" style="width:50px;height:20px" type="number" name="min"> --- R<input class="limits" id="max" style="width:50px;height:20px" type="number" name="max">
+              R<input id="min" class="limits" default value="0" style="width:55px;height:20px" onkeyup="filterShoes()" onchange="filterShoes()" type="number" name="min" min="0"> --- R<input class="limits" id="max"  max="20000" value="10000" onkeyup="filterShoes()" onchange="filterShoes()" style="width:55px;height:20px" name="max" type="number">
             </div>
           </li>
         </div>
@@ -81,7 +81,7 @@
         <script id="shoe-template" type="text/x-handlebars-template">
           {{#each shoe}}
           <div class="shoe">
-            <img class="image" src={{img}} alt="picture of this shoe">
+            <img class="image" src="{{shoeImgUrl}}" alt="picture of this shoe">
             <p class="info">
               Brand: <span class="brand">{{brand}}</span><br>
               Color: <span class="color">{{color}}</span><br>

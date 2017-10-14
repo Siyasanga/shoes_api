@@ -8,23 +8,21 @@ $.ajax({
   document.querySelector("#brands").innerHTML += compiledBrandOptions({shoeBrand:stock.availBrands});
   document.querySelector("#colors").innerHTML += compiledColorOptions({shoeColor:stock.availColors});
   document.querySelector("#min").value = stock.minPrice; document.querySelector("#max").value = stock.maxPrice;
-  document.querySelector("#max").min = stock.minPrice;
-  document.querySelector("#min").min = stock.minPrice;
-  document.querySelector("#max").max = stock.maxPrice;
-  document.querySelector("#min").max = stock.maxPrice;
+  document.querySelector("#max").min = stock.minPrice; document.querySelector("#min").min = stock.minPrice;
+  document.querySelector("#max").max = stock.maxPrice; document.querySelector("#min").max = stock.maxPrice;
   document.querySelector(".main").innerHTML += stockCompiler({shoe:stock.shoes});
 })
 //*********************Creating new Stock****************************
-function newStock(name,colors,cost,sizes,url) {
-  var newItem = {
-    brand: name,
-    color: colors,
-    price: cost,
-    size: sizes.split(","),
-    img:url
-  };
-  return newItem;
-}
+// function newStock(name,colors,cost,sizes,url) {
+//   var newItem = {
+//     brand: name,
+//     color: colors,
+//     price: cost,
+//     size: sizes.split(","),
+//     img:url
+//   };
+//   return newItem;
+// }
 //********************************
 // Capture new stock from the user
 function createStock() {
@@ -74,26 +72,23 @@ var activeColors = [];
 var priceRange = [];
 //*********************Filtering Shoes*************************
 function filterShoes() {
-  console.log(event.srcElement);
   if(event.srcElement.classList.contains("brand")) {
     //Capturing selected brands
     if(event.srcElement.checked){
       if(activeBrands.indexOf(event.srcElement.value) == -1)
-      activeBrands.push(event.srcElement.value);
+        activeBrands.push(event.srcElement.value);
     }else {
       activeBrands.splice(activeBrands.indexOf(event.srcElement.value),1);
     }
-    console.log(activeBrands);
   } // End capturing selected brands
   else if(event.srcElement.classList.contains("colorFilter")){
     //Capturing selected colors
     if(event.srcElement.checked){
       if(activeColors.indexOf(event.srcElement.value) == -1)
-      activeColors.push(event.srcElement.value);
+        activeColors.push(event.srcElement.value);
     }else {
       activeColors.splice(activeColors.indexOf(event.srcElement.value),1);
     }
-    console.log(activeColors);
   } // End capturing selected colors
   else {
     if(Number(document.querySelector("#min").value) <= Number(document.querySelector("#max").value)){
@@ -101,11 +96,15 @@ function filterShoes() {
       priceRange[1] = document.querySelector("#max").value;
     }
   } // End capturing price range
-  queryString = JSON.stringify(activeBrands)+","+JSON.stringify(activeColors)+","+JSON.stringify(priceRange);
+  queryString = "["+JSON.stringify(activeBrands)+","+JSON.stringify(activeColors)+","+JSON.stringify(priceRange)+"]";
   console.log(queryString);
-  // $.ajax({
-  //   url:
-  // });
+  $.ajax({
+    url:"http://localhost:3000/api/filterShoes/"+queryString,
+    type:"get"
+  }).done(function(shoes) {
+    console.log(shoes);
+      document.querySelector(".main").innerHTML = stockCompiler({shoe:shoes});
+  });
   // filtered = [];
   // if(brand.length !== 0){
   //   activeBrands.push(brand);

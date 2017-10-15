@@ -7,25 +7,14 @@ $.ajax({
 }).done(function(stock) {
   document.querySelector("#brands").innerHTML += compiledBrandOptions({shoeBrand:stock.availBrands});
   document.querySelector("#colors").innerHTML += compiledColorOptions({shoeColor:stock.availColors});
-  document.querySelector("#min").value = stock.minPrice; document.querySelector("#max").value = stock.maxPrice;
   document.querySelector("#max").min = stock.minPrice; document.querySelector("#min").min = stock.minPrice;
   document.querySelector("#max").max = stock.maxPrice; document.querySelector("#min").max = stock.maxPrice;
+  document.querySelector("#min").value = stock.minPrice; document.querySelector("#max").value = stock.maxPrice;
   document.querySelector(".main").innerHTML += stockCompiler({shoe:stock.shoes});
 })
-//*********************Creating new Stock****************************
-// function newStock(name,colors,cost,sizes,url) {
-//   var newItem = {
-//     brand: name,
-//     color: colors,
-//     price: cost,
-//     size: sizes.split(","),
-//     img:url
-//   };
-//   return newItem;
-// }
-//********************************
+//******************************************************************************
 // Capture new stock from the user
-function createStock() {
+function captureNewShoe() {
   for(var i = 0; i<shoes.children.length; i++){
     brand = document.querySelector("#brand").value;
     color = document.querySelector("#color").value;

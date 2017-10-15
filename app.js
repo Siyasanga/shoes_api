@@ -61,7 +61,7 @@ app.get("/api/shoes/brand/:brandName",function(req, res) {
 });
 // Building a mega search feature
 app.get("/api/filterShoes/:queryString",function(req, res) {
-  // expecting queryString to be like: [["Bronx","Gucci","Converse"],["Black","Blue","Pink"],[0,350]];
+  // expecting queryString to be like: [["Bronx","Gucci","Converse"],["Black","Blue","Pink"],[0,350],8];
   console.log(req.params.queryString);
   var filteringOptions =  JSON.parse(req.params.queryString);
   console.log(filteringOptions[0]);
@@ -74,10 +74,17 @@ app.get("/api/filterShoes/:queryString",function(req, res) {
     priceRange.$gt = filteringOptions[2][0];
     priceRange.$lt = filteringOptions[2][1];
   }
-  database.find({brand:{$in:selectedBrands}, color:{$in:selectedColors}, price:priceRange},function(err,shoes) {
-    if(err) console.log("Error finding shoes by brand name:\n"+err);
-    else res.json(shoes);
-  });
+  size = "";
+  if(filteringOptions[3].length !== 0) size = filteringOptions[3]+":";
+  // console.log(JSON.parse(size));
+  database.find({brand:{$in:selectedBrands},
+    color:{$in:selectedColors},
+    price:priceRange,
+    size:{$regex:size}},
+    function(err,shoes) {
+      if(err) console.log("Error finding shoes by brand name:\n"+err);
+      else res.json(shoes);
+    });
 });
 // List all shoes for a given size
 app.get("/api/shoes/size/:shoeSize",function(req, res) {

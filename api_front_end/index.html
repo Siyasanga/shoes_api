@@ -16,17 +16,17 @@
           <div class="inp">
             <label for="brand">Brand:</label>
             <input type="text" id="brand" name="brand" required placeholder="Enter brand name">
-            <p class="error" style="display:none" id="errBrand">brand name is a required field</p>
+            <p class="error" style="display:none" id="errBrand">brand name is required</p>
           </div>
           <div class="inp">
             <label for="color">Color:</label>
             <input type="text" id="color" name="color" placeholder="Enter shoe color">
-            <p class="error" style="display:none" id="errColor">shoe color is a required field</p>
+            <p class="error" style="display:none" id="errColor">shoe color is required</p>
           </div>
           <div class="inp">
             <label for="sizes">Avalable sizes:</label>
-            <input type="text" id="sizes" name="sizes" placeholder="Enter size for each pair, e.g: 3,3,5,7" style="width:240px"><br>
-            <p class="error" style="display:none" id="errSize">please make sure size for each pair is seperated by a comma</p>
+            <input type="text" id="sizes" name="sizes" placeholder="Enter size:quantify pair, e.g: 5:10,6:15" style="width:240px"><br>
+            <p class="error" style="display:none" id="errSize">please ensure size:quantity pairs are comma separated</p>
           </div>
           <div class="inp">
             <label for="sex">Sex:</label>
@@ -39,12 +39,12 @@
             <p class="error" style="display:none" id="errColor">shoe price is a required field</p>
           </div>
           <div class="inp">
-            <label for="image">Upload Picture of the shoe:</label>
-            <input type="file" id="image" name="image">
+            <label for="image">Enter image url of the shoe:</label>
+            <input type="text" id="image" name="image">
             <p class="error" style="display:none" id="errImage">Don't forget to upload the picture</p>
           </div>
           <br>
-          <button id="submit" name="button">Submit Stock</button>
+          <button id="submit" onclick="captureNewShoe()" name="button">Submit Stock</button>
           <button id="cancel" name="button">Cancel</button>
       </div>
       <div class="aside">

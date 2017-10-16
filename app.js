@@ -36,7 +36,6 @@ function getAvailSizes(shoes) {
     }
     // if()
   });
-  console.log(availSizes);
   return availSizes;
 }
 function setStock(cb){

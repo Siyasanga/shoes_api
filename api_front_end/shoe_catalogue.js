@@ -11,23 +11,38 @@ $.ajax({
   document.querySelector("#max").min = stock.minPrice; document.querySelector("#min").min = stock.minPrice;
   document.querySelector("#max").max = stock.maxPrice; document.querySelector("#min").max = stock.maxPrice;
   document.querySelector("#min").value = stock.minPrice; document.querySelector("#max").value = stock.maxPrice;
-  // console.log(stock.sizes);
-  console.log(sizesCompiler({availSizes:stock.sizes}));
   document.querySelector(".sizeOptions").innerHTML += sizesCompiler({availSizes:stock.sizes});
   document.querySelector(".main").innerHTML += stockCompiler({shoe:stock.shoes});
 })
 //******************************************************************************
 // Capture new stock from the user
 function captureNewShoe() {
-  for(var i = 0; i<shoes.children.length; i++){
-    brand = document.querySelector("#brand").value;
-    color = document.querySelector("#color").value;
-    sizes = document.querySelector("#sizes").value;
-    cost = document.querySelector("#image").value;
-    shoeImgUrl =  document.querySelector("#image").value;
-    stock.push(newStock(brand,color,cost,sizes,shoeImgUrl));
+  var newShoe = {};
+  if(validateForm()){
+      newShoe.brand = document.querySelector("#brand").value;
+      newShoe.color = document.querySelector("#color").value;
+      newShoe.size = document.querySelector("#sizes").value;
+      sizesObject = {};
+      document.querySelector("#sizes").value.split(",").forEach(function(currentSize) {
+        size = currentSize.substring(0,currentSize.indexOf(":"));
+        sizesObject[size] = Number(currentSize.substring(currentSize.indexOf(":")+1));
+      })
+      newShoe.size = JSON.stringify(sizesObject);
+      newShoe.price = Number(document.querySelector("#price").value);
+      console.log(newShoe.price);
+      newShoe.shoeImgUrl =  document.querySelector("#image").value;
+      // stock.push(newStock(brand,color,cost,sizes,shoeImgUrl));
+    console.log(newShoe);
+    $.ajax({
+      url:"http://localhost:3000/api/shoes",
+      type:"post",
+      data:newShoe
+    }).done(function(result) {
+      location.reload(true);
+      console.log("hello");
+      window.location.reload(false);
+    })
   }
-  return stock;
 }
 //*************Validate Form**************************//
 // Validating form and returning false is data is not valid
@@ -40,12 +55,10 @@ function validateForm() {
   }
   if(document.querySelector("#color").value == ""){
     document.querySelector("#errColor").style.display = "block";
-    console.log(document.querySelector("#color").value);
     flag = false;
   }
   if(document.querySelector("#sizes").value.length == 0){
     document.querySelector("#errSize").style.display = "block";
-    console.log(document.querySelector("#sizes").value);
     flag = false;
   }
   if(document.querySelector("#image").value == ""){

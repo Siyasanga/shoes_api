@@ -23,6 +23,9 @@ body{
 .brandHeading{
   margin-top: 0;
 }
+.inp{
+  margin-bottom: 10px;
+}
 #submit, #cancel{
   margin-top: 18px;
   width: 150px;

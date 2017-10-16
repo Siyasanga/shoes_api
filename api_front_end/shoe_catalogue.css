@@ -1,6 +1,7 @@
 body{
     margin: 0;
     margin-top: 0;
+    position: relative;
 }
 .off{
   display: none;
@@ -80,7 +81,26 @@ nav{
   text-align: center;
   height: 80px;
   background-color: yellow;
+  width: 100%;
+  /*margin-bottom: 150px;*/
+  position: fixed;
 }
+.aside{
+  position: relative;
+  top: 80px;
+  padding-left: 10px;
+}
+#newStock{
+  position: relative;
+  /*margin-top: 80px;*/
+  display: block;
+  top: 80px;
+  background: green;
+}
+#newStock{
+
+}
+
 h1{
   margin: 0;
   padding-top: 25px;

@@ -50,7 +50,18 @@
       <div class="aside">
         <h2>Refine results:</h2>
         <div>
-          <li class="brands" id="brands"><h3>Brands</h3>
+          <li class="brands" id="brands">
+            <label for="size"><h3 class="inline">Size:</h3>
+              <select class="sizeOptions" onchange="filterShoes()">
+                <option value="">All-sizes</option>
+                <script id="availSizes" type="text/x-handlebars-template">
+                  {{#each availSizes}}
+                    <option value="{{this}}" >{{this}}</option>
+                  {{/each}}
+                </script>
+              </select>
+            </label>
+            <h3 class="brandHeading">Brands</h3>
             <script id="brandOptions" type="text/x-handlebars-template">
             {{#each shoeBrand}}
             <div class="brandOption">

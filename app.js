@@ -27,20 +27,28 @@ function getOptions(property, stock) {
   } // end of loop
   return result;
 } // End of getOptions()
+function getAvailSizes(shoes) {
+  var availSizes = [];
+  shoes.forEach(function(currentShoe){
+    sizes = JSON.parse(currentShoe.size);
+    for(i in sizes){
+      if(availSizes.indexOf(i) == -1) availSizes.push(i);
+    }
+    // if()
+  });
+  console.log(availSizes);
+  return availSizes;
+}
 function setStock(cb){
   database.find({},null,{sort:{price:1}},function(err, shoes) {
-    if(err){
-      console.log("Error finding the shoes from the database:\n"+err);
-      return;
-    }
-    else if(shoes){
-      if(shoes.length > 0){
-        stock.availBrands = getOptions("brand",shoes);
-        stock.availColors = getOptions("color",shoes);
-        stock.minPrice = shoes[0].price;
-        stock.maxPrice = shoes[shoes.length-1].price;
-        stock.shoes = shoes;
-      }
+    if(err) console.log("Error finding the shoes from the database:\n"+err);
+    else{
+      stock.availBrands = getOptions("brand",shoes);
+      stock.availColors = getOptions("color",shoes);
+      stock.minPrice = shoes[0].price;
+      stock.maxPrice = shoes[shoes.length-1].price;
+      stock.shoes = shoes;
+      stock.sizes = getAvailSizes(shoes);
       if(typeof(cb) == "function") cb(stock); // Passing shoes to the callback
     }
   });
@@ -48,7 +56,7 @@ function setStock(cb){
 // GET all the shoe stock
 app.get("/api/shoes",function(req, res) {
   setStock(function(stock) {
-  res.json(stock);
+    res.json(stock);
   });
 });
 // List all shoes for a given brand
@@ -61,26 +69,26 @@ app.get("/api/shoes/brand/:brandName",function(req, res) {
 });
 // Building a mega search feature
 app.get("/api/filterShoes/:queryString",function(req, res) {
-  // expecting queryString to be like: [["Bronx","Gucci","Converse"],["Black","Blue","Pink"],[0,350],8];
+  // expecting queryString to be like: ["Bronx","Gucci","Converse"],["Black","Blue","Pink"],[0,350];
   console.log(req.params.queryString);
   var filteringOptions =  JSON.parse(req.params.queryString);
-  console.log(filteringOptions[0]);
   selectedBrands = stock.availBrands;
   if(filteringOptions[0].length !== 0) selectedBrands = filteringOptions[0];
   selectedColors = stock.availColors;
   if(filteringOptions[1].length !== 0) selectedColors = filteringOptions[1];
   priceRange = {"$gt":stock.minPrice-1, "$lt":stock.maxPrice+1};
+  console.log(priceRange);
   if(filteringOptions[2].length !== 0){
-    priceRange.$gt = filteringOptions[2][0];
-    priceRange.$lt = filteringOptions[2][1];
+    priceRange.$gt = filteringOptions[2][0]-1;
+    priceRange.$lt = filteringOptions[2][1]+1;
   }
   size = "";
-  if(filteringOptions[3].length !== 0) size = filteringOptions[3]+":";
-  // console.log(JSON.parse(size));
-  database.find({brand:{$in:selectedBrands},
+  if(filteringOptions[3].length !== 0) size = size = '\\"'+filteringOptions[3]+'\\":';
+  database.find({
+    brand:{$in:selectedBrands},
     color:{$in:selectedColors},
     price:priceRange,
-    size:{$regex:size}},
+    size:{$regex: size}},
     function(err,shoes) {
       if(err) console.log("Error finding shoes by brand name:\n"+err);
       else res.json(shoes);
@@ -125,7 +133,7 @@ app.post("/api/shoes",function(req, res) {
       res.redirect("/api/shoes");
     }
   })
-});
+})
 // Starting the server
 var port = process.env.PORT || 3000;
 var host = process.env.HOST || "http://localhost";

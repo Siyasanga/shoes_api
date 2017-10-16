@@ -16,6 +16,13 @@ body{
   position: absolute;
   margin-bottom: -10px;
 }
+.inline{
+  display: inline-block;
+  margin-top: -15px;
+}
+.brandHeading{
+  margin-top: 0;
+}
 #submit, #cancel{
   margin-top: 18px;
   width: 150px;

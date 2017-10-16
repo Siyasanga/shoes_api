@@ -1,6 +1,7 @@
 var compiledBrandOptions = Handlebars.compile(document.querySelector("#brandOptions").innerHTML);
 var compiledColorOptions = Handlebars.compile(document.querySelector("#colorOptions").innerHTML);
 var stockCompiler = Handlebars.compile(document.querySelector("#shoe-template").innerHTML);
+var sizesCompiler = Handlebars.compile(document.querySelector("#availSizes").innerHTML);
 $.ajax({
   url: "http://localhost:3000/api/shoes",
   type:"get"
@@ -10,6 +11,9 @@ $.ajax({
   document.querySelector("#max").min = stock.minPrice; document.querySelector("#min").min = stock.minPrice;
   document.querySelector("#max").max = stock.maxPrice; document.querySelector("#min").max = stock.maxPrice;
   document.querySelector("#min").value = stock.minPrice; document.querySelector("#max").value = stock.maxPrice;
+  // console.log(stock.sizes);
+  console.log(sizesCompiler({availSizes:stock.sizes}));
+  document.querySelector(".sizeOptions").innerHTML += sizesCompiler({availSizes:stock.sizes});
   document.querySelector(".main").innerHTML += stockCompiler({shoe:stock.shoes});
 })
 //******************************************************************************
@@ -59,6 +63,7 @@ function validateForm() {
 var activeBrands = [];
 var activeColors = [];
 var priceRange = [];
+var selectedSize = "";
 //*********************Filtering Shoes*************************
 function filterShoes() {
   if(event.srcElement.classList.contains("brand")) {
@@ -85,7 +90,9 @@ function filterShoes() {
       priceRange[1] = document.querySelector("#max").value;
     }
   } // End capturing price range
-  queryString = "["+JSON.stringify(activeBrands)+","+JSON.stringify(activeColors)+","+JSON.stringify(priceRange)+"]";
+
+  selectedSize = document.querySelector(".sizeOptions").value;
+  queryString = "["+JSON.stringify(activeBrands)+","+JSON.stringify(activeColors)+","+JSON.stringify(priceRange)+",\""+selectedSize+"\"]";
   console.log(queryString);
   $.ajax({
     url:"http://localhost:3000/api/filterShoes/"+queryString,

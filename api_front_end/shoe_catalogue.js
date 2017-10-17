@@ -2,6 +2,8 @@ var compiledBrandOptions = Handlebars.compile(document.querySelector("#brandOpti
 var compiledColorOptions = Handlebars.compile(document.querySelector("#colorOptions").innerHTML);
 var stockCompiler = Handlebars.compile(document.querySelector("#shoe-template").innerHTML);
 var sizesCompiler = Handlebars.compile(document.querySelector("#availSizes").innerHTML);
+var singleShoe = Handlebars.compile(document.querySelector("#singleView").innerHTML);
+
 $.ajax({
   url: "http://localhost:3000/api/shoes",
   type:"get"
@@ -115,8 +117,37 @@ function filterShoes() {
   });
 }
 function buyShoe(shoeId){
+
   console.log(shoeId);
+  toggleDisplay("#singleShoe");
+  $.ajax({
+    url:"http://localhost:3000/api/shoesId/"+shoeId,
+    type:"get"
+  }).done(function(shoe) {
+    console.log(shoe);
+    var sizes = JSON.parse(shoe.size);
+    availSizes = Object.keys(sizes);
+
+    document.querySelector("#shoe").innerHTML = singleShoe({shoe, availSizes});
+    // singleShoe({shoe})
+      // document.querySelector(".main").innerHTML = stockCompiler({shoe:shoes});
+  });
 }
+//***************************************************************************
+function pairs4size() {
+  console.log(event.srcElement.value);
+  
+}
+//***************************************************************************
+  function toggleDisplay(id) {
+  if(document.querySelector(id).style.display == "none"){
+    document.querySelector(id).style.display = "block";
+  }else {
+    document.querySelector(id).style.display = "none";
+  }
+}
+toggleDisplay("#newStock");
+toggleDisplay("#singleShoe");
 //*************************Filtering By Colors*******************************
 // function pullColors(color) {
 //   results = [];

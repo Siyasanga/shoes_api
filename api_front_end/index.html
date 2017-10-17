@@ -10,6 +10,7 @@
   <body>
     <nav>
       <h1>Welcome to Cwenga's Designer Shoe Store</h1>
+      <button type="button" onclick="toggleDisplay('#newStock')" id="addStock" name="button">ADD STOCK</button>
     </nav>
     <div class="wrapper">
       <div id="newStock">
@@ -45,7 +46,7 @@
           </div>
           <br>
           <button id="submit" onclick="captureNewShoe()" name="button">Submit Stock</button>
-          <button id="cancel" name="button">Cancel</button>
+          <button id="cancel" name="button" onclick="toggleDisplay()">Cancel</button>
       </div>
       <div class="aside">
         <h2>Refine results:</h2>
@@ -89,6 +90,26 @@
         </div>
       </div>
       <div class="main">
+        <div id="singleShoe">
+          <div id="shoe">
+            <script id="singleView" type="text/x-handlebars-template">
+              <img class="image" src="{{shoe.shoeImgUrl}}" alt="picture of this {{brand}} shoe">
+              <p class="shoeDetails">
+                Brand: <span class="brand">{{shoe.brand}}</span><br>
+                Color: <span class="color">{{shoe.color}}</span><br>
+                Price: R<span class="price">{{shoe.price}}</span><br>
+                Select size: <select class="sizeOptions" onchange="pairs4size()">
+                                {{#each availSizes}}
+                                  <option value="{{this}}" >{{this}}</option>
+                                {{/each}}
+                              </select><br>
+                # of pair to buy? spa <input type="number" min="1" max="{{pairsAvailable}}"name="" value=""><br>
+                Totol Price : <span class="price">{{totalPrice}}</span>
+              </p>
+              <button id="buyBtn">Buy</button>
+            </script>
+          </div>
+        </div>
         <script id="shoe-template" type="text/x-handlebars-template">
           {{#each shoe}}
           <div class="shoe">

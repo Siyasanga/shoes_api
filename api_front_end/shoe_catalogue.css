@@ -44,9 +44,11 @@ body{
   margin-top: 1px;
   text-align: left;
 }
-#newStock{
-  padding: 20px;
-  text-align: center;
+#addStock{
+  float: right;
+  position: relative;
+  top: -25px;
+  margin-right: 20px;
 }
 /**********************************/
 .brandOption, .colorOption{
@@ -84,6 +86,7 @@ nav{
   width: 100%;
   /*margin-bottom: 150px;*/
   position: fixed;
+  z-index: 1000;
 }
 .aside{
   position: relative;
@@ -92,15 +95,42 @@ nav{
 }
 #newStock{
   position: relative;
-  /*margin-top: 80px;*/
   display: block;
   top: 80px;
   background: green;
+  padding: 20px;
+  text-align: center;
+  display: none;
 }
-#newStock{
-
+#singleShoe{
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(30,30,30,0.4);
+  position: fixed;
+  top :1px;
+  padding-top: 50px;
+  left: -1px;
+  display: none;
 }
-
+#shoe{
+  margin: auto;
+  width: 360px;
+  height: 60%;
+  overflow: auto;
+  margin-top: 20px;
+  background-color: red;
+  position: inherit;
+  top: 160px;
+  left: 590px;
+  box-sizing: content-box;
+}
+#shoe img{
+  width: 90%;
+  height: 180px;
+  /*margin-left: auto;*/
+  position: static;
+  padding: 10px;
+}
 h1{
   margin: 0;
   padding-top: 25px;
@@ -111,6 +141,8 @@ h1{
   padding-left: 30px;
   border-left: 1px solid grey;
   padding-bottom: 20px;
+  position: relative;
+  top: 80px;
 }
 .info{
   margin-bottom: 5px;

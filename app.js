@@ -109,6 +109,13 @@ app.get("/api/shoes/brand/:brandName/size/:size",function(req, res) {
     else res.json(shoes);
   });
 });
+app.get("/api/shoesId/:shoeID",function(req, res) {
+  console.log("Brand: "+req.params.brandName+" Size: "+req.params.size);
+  database.findOne({_id:req.params.shoeID},function(err,shoes) {
+    if(err) console.log("Error finding shoes by shoe size:\n"+err);
+    else res.json(shoes);
+  });
+});
 // Update shoe stock after selling
 app.post("/api/shoes/sold/:shoeId",function(req, res) {
   console.log("Shoe ID: "+req.params.shoeId);

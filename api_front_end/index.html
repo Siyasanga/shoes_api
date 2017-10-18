@@ -46,7 +46,7 @@
           </div>
           <br>
           <button id="submit" onclick="captureNewShoe()" name="button">Submit Stock</button>
-          <button id="cancel" name="button" onclick="toggleDisplay()">Cancel</button>
+          <button id="cancel" name="button" onclick="toggleDisplay('#newStock')">Cancel</button>
       </div>
       <div class="aside">
         <h2>Refine results:</h2>
@@ -55,32 +55,11 @@
             <label for="size"><h3 class="inline">Size:</h3>
               <select class="sizeOptions" onchange="filterShoes()">
                 <option value="">All-sizes</option>
-                <script id="availSizes" type="text/x-handlebars-template">
-                  {{#each availSizes}}
-                    <option value="{{this}}" >{{this}}</option>
-                  {{/each}}
-                </script>
               </select>
             </label>
             <h3 class="brandHeading">Brands</h3>
-            <script id="brandOptions" type="text/x-handlebars-template">
-            {{#each shoeBrand}}
-            <div class="brandOption">
-              <input class="check brand"  onclick="filterShoes()" value="{{this}}" id="{{this}}" type="checkbox">
-              <label for="{{this}}" class="Brand">{{this}}</label>
-            </div>
-            {{/each}}
-            </script>
           </li>
           <li class="colors" id="colors"><h3>Color</h3>
-            <script id="colorOptions" type="text/x-handlebars-template">
-            {{#each shoeColor}}
-              <div class="colorOption">
-                <input class="check colorFilter" onclick="filterShoes()" value="{{this}}" id="{{this}}" type="checkbox">
-                <label for="{{this}}" class="Color">{{this}}</label>
-              </div>
-            {{/each}}
-            </script>
           </li>
           <li><h3>Price Range</h3>
             <div class="panel">
@@ -92,41 +71,68 @@
       <div class="main">
         <div id="singleShoe">
           <div id="shoe">
-            <script id="singleView" type="text/x-handlebars-template">
-              <img class="image" src="{{shoe.shoeImgUrl}}" alt="picture of this {{brand}} shoe">
-              <p class="shoeDetails">
-                Brand: <span class="brand">{{shoe.brand}}</span><br>
-                Color: <span class="color">{{shoe.color}}</span><br>
-                Price: R<span class="price">{{shoe.price}}</span><br>
-                Select size: <select class="sizeOptions" onchange="pairs4size()">
-                                {{#each availSizes}}
-                                  <option value="{{this}}" >{{this}}</option>
-                                {{/each}}
-                              </select><br>
-                # of pair to buy? spa <input type="number" min="1" max="{{pairsAvailable}}"name="" value=""><br>
-                Totol Price : <span class="price">{{totalPrice}}</span>
-              </p>
-              <button id="buyBtn">Buy</button>
-            </script>
           </div>
         </div>
-        <script id="shoe-template" type="text/x-handlebars-template">
-          {{#each shoe}}
-          <div class="shoe">
-            <img class="image" src="{{shoeImgUrl}}" alt="picture of this shoe">
-            <p class="info">
-              Brand: <span class="brand">{{brand}}</span><br>
-              Color: <span class="color">{{color}}</span><br>
-              Price: R<span class="price">{{price}}</span><br>
-              <!--Stock Available: <span class="stock">20</span><br>-->
-              Avail. sizes: <span class="size">{{size}}</span>
-            </p>
-            <button id="buyBtn" onclick="buyShoe('{{_id}}')">Buy</button>
-          </div>
-          {{/each}}
-        </script>
+        <div class="main_space">
+        </div>
       </div>
     </div>
+    <!-- All my template scripts -->
+    <script id="singleView" type="text/x-handlebars-template">
+      <img class="image" src="{{shoe.shoeImgUrl}}" alt="picture of this {{brand}} shoe">
+      <p class="shoeDetails">
+        Brand: <span class="brand">{{shoe.brand}}</span><br>
+        Color: <span class="color">{{shoe.color}}</span><br>
+        Price: R<span class="price">{{shoe.price}}</span><br>
+        Select size: <select id="sizeOptions" onchange="pairs4size()">
+          {{#each availSizes}}
+          <option value="{{this}}" >{{this}}</option>
+          {{/each}}
+        </select><br>
+        Pairs available for this size: <span id="in_stock">{{in_stock}}</span><br>
+        How many pairs you want? <input type="number" onchange="calcTotPrice()" id="stock_limit"min="1" max="{{in_stock}}"name="" value="1"><br>
+        Totol Price : R<span id="totalPrice">{{totalPrice}}</span>
+      </p>
+      <button id="buyBtn" onclick="updateStock()" value="{{shoe._id}}">Buy</button>
+      <button id="cancelSingle" name="button" onclick="toggleDisplay('#singleShoe')">Cancel</button>
+    </script>
+    <script id="availSizes" type="text/x-handlebars-template">
+      {{#each availSizes}}
+      <option value="{{this}}" >{{this}}</option>
+      {{/each}}
+    </script>
+    <script id="colorOptions" type="text/x-handlebars-template">
+      {{#each shoeColor}}
+      <div class="colorOption">
+        <input class="check colorFilter" onclick="filterShoes()" value="{{this}}" id="{{this}}" type="checkbox">
+        <label for="{{this}}" class="Color">{{this}}</label>
+      </div>
+      {{/each}}
+    </script>
+    <script id="brandOptions" type="text/x-handlebars-template">
+      {{#each shoeBrand}}
+      <div class="brandOption">
+        <input class="check brand"  onclick="filterShoes()" value="{{this}}" id="{{this}}" type="checkbox">
+        <label for="{{this}}" class="Brand">{{this}}</label>
+      </div>
+      {{/each}}
+    </script>
+    <script id="shoe-template" type="text/x-handlebars-template">
+      {{#each shoe}}
+      <div class="shoe">
+        <img class="image" src="{{shoeImgUrl}}" alt="picture of this shoe">
+        <p class="info">
+          Brand: <span class="brand">{{brand}}</span><br>
+          Color: <span class="color">{{color}}</span><br>
+          Price: R<span class="price">{{price}}</span><br>
+          <!--Stock Available: <span class="stock">20</span><br>-->
+          Avail. sizes: <span class="size">{{size}}</span>
+        </p>
+        <button id="buyBtn" onclick="buyShoe('{{_id}}')">Buy</button>
+      </div>
+      {{/each}}
+    </script>
+
   </body>
   <script src="shoe_catalogue.js" charset="utf-8"></script>
 </html>

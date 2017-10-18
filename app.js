@@ -120,13 +120,12 @@ app.get("/api/shoesId/:shoeID",function(req, res) {
 app.post("/api/shoes/sold/:shoeId",function(req, res) {
   console.log("Shoe ID: "+req.params.shoeId);
   console.log(req.body);
-  var amount = req.body.amount;
   database.findOneAndUpdate({_id:req.params.shoeId},
-                            {$inc: {in_stock:-amount}},
+                            {$set: {size:JSON.stringify(req.body)}},
                             {new:true},
                             function(err, affected) {
                               if(err) console.log("Error finding and updating shoe by id:\n"+err);
-                              else res.redirect("/api/shoes");
+                              else res.json(affected);
                             });
 }); // end of post
 // Add new shoe to stock

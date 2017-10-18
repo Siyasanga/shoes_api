@@ -147,7 +147,7 @@ h1{
 .info{
   margin-bottom: 5px;
 }
-#buyBtn{
+#buyBtn,#cancelSingle{
   display: block;
   float: right;
   width: 100px;

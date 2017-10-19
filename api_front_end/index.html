@@ -51,15 +51,20 @@
       <div class="aside">
         <h2>Refine results:</h2>
         <div>
-          <li class="brands" id="brands">
+          <li class="sizes">
             <label for="size"><h3 class="inline">Size:</h3>
-              <select class="sizeOptions" onchange="filterShoes()">
-                <option value="">All-sizes</option>
+                <select class="sizeOptions" onchange="filterShoes()">
               </select>
             </label>
+          </li>
+          <li class="brands" id="brands">
             <h3 class="brandHeading">Brands</h3>
+            <div id="brandList">
+            </div>
           </li>
           <li class="colors" id="colors"><h3>Color</h3>
+            <div id="colorList">
+            </div>
           </li>
           <li><h3>Price Range</h3>
             <div class="panel">
@@ -84,9 +89,9 @@
         Brand: <span class="brand">{{shoe.brand}}</span><br>
         Color: <span class="color">{{shoe.color}}</span><br>
         Price: R<span class="price">{{shoe.price}}</span><br>
-        Select size: <select id="sizeOptions" onchange="pairs4size()">
+        Select size: <select id="sizeOptions" onchange="pairs4size()" default = >
           {{#each availSizes}}
-          <option value="{{this}}" >{{this}}</option>
+          <option value="{{this}}">{{this}}</option>
           {{/each}}
         </select><br>
         Pairs available for this size: <span id="in_stock">{{in_stock}}</span><br>
@@ -97,6 +102,7 @@
       <button id="cancelSingle" name="button" onclick="toggleDisplay('#singleShoe')">Cancel</button>
     </script>
     <script id="availSizes" type="text/x-handlebars-template">
+      <option value="">All-sizes</option>
       {{#each availSizes}}
       <option value="{{this}}" >{{this}}</option>
       {{/each}}
@@ -126,7 +132,7 @@
           Color: <span class="color">{{color}}</span><br>
           Price: R<span class="price">{{price}}</span><br>
           <!--Stock Available: <span class="stock">20</span><br>-->
-          Avail. sizes: <span class="size">{{size}}</span>
+          <!-- Avail. sizes: <span class="size">{{size}}</span> -->
         </p>
         <button id="buyBtn" onclick="buyShoe('{{_id}}')">Buy</button>
       </div>

@@ -42,13 +42,15 @@ function setStock(cb){
   database.find({},null,{sort:{price:1}},function(err, shoes) {
     if(err) console.log("Error finding the shoes from the database:\n"+err);
     else{
-      stock.availBrands = getOptions("brand",shoes);
-      stock.availColors = getOptions("color",shoes);
-      stock.minPrice = shoes[0].price;
-      stock.maxPrice = shoes[shoes.length-1].price;
-      stock.shoes = shoes;
-      stock.sizes = getAvailSizes(shoes);
-      if(typeof(cb) == "function") cb(stock); // Passing shoes to the callback
+      if(shoes.length !== 0){
+        stock.availBrands = getOptions("brand",shoes);
+        stock.availColors = getOptions("color",shoes);
+        stock.minPrice = shoes[0].price;
+        stock.maxPrice = shoes[shoes.length-1].price;
+        stock.shoes = shoes;
+        stock.sizes = getAvailSizes(shoes);
+        if(typeof(cb) == "function") cb(stock); // Passing shoes to the callback
+      }
     }
   });
 }
@@ -94,7 +96,7 @@ app.get("/api/filterShoes/:queryString",function(req, res) {
     });
 });
 // List all shoes for a given size
-app.get("/api/shoes/size/:shoeSize",function(req, res) {
+  app.get("/api/shoes/size/:shoeSize",function(req, res) {
   console.log(req.params.shoeSize);
   database.find({size:req.params.shoeSize},function(err,shoes) {
     if(err) console.log("Error finding shoes by shoe size:\n"+err);

@@ -201,24 +201,24 @@
       }];
 
     // console.log(JSON.stringify({"7":6,"8":5,"9":5,"6":7,"5":6}).includes('"5":'));
-    // stock.forEach(function(current) {
-    //     var shoe = {};
-    //     shoe.color = current.color;
-    //     shoe.brand = current.brand;
-    //     shoe.price = current.price;
-    //     shoe.size = JSON.stringify({"7":6,"8":5,"9":5,"6":7,"5":6});
-    //     shoe.shoeImgUrl = current.img;
-    //     $.ajax({
-    //       url:"http://localhost:3000/api/shoes",
-    //       type:"post",
-    //       data:shoe
-    //     });
-    // });
-    // console.log(stockPromises);
+    stock.forEach(function(current) {
+        var shoe = {};
+        shoe.color = current.color;
+        shoe.brand = current.brand;
+        shoe.price = current.price;
+        shoe.size = {"7":6,"8":5,"9":5,"6":7,"5":6};
+        shoe.shoeImgUrl = current.img;
+        $.ajax({
+          url:"https://siya-shoe-api.herokuapp.com/api/shoes",
+          type:"post",
+          data:shoe
+        });
+    });
+    console.log(stockPromises);
   // console.log(stockPromises);
   $("#test").click(function() {
         $.ajax({
-          url: "http://localhost:3000/api/shoes",
+          url: "https://siya-shoe-api.herokuapp.com/api/shoes",
           type: "get"
         }).done(function(result) {
             console.log(result);

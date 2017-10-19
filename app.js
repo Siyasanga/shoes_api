@@ -50,6 +50,8 @@ function setStock(cb){
         stock.shoes = shoes;
         stock.sizes = getAvailSizes(shoes);
         if(typeof(cb) == "function") cb(stock); // Passing shoes to the callback
+      }else {
+        if(typeof(cb) == "function") cb({}); // Passing shoes to the callback
       }
     }
   });

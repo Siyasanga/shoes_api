@@ -8,14 +8,16 @@ function displayStock() {
     url: "http://localhost:3000/api/shoes",
     type:"get"
   }).done(function(stock) {
-    document.querySelector("#brandList").innerHTML = compiledBrandOptions({shoeBrand:stock.availBrands});
-    document.querySelector("#colorList").innerHTML = compiledColorOptions({shoeColor:stock.availColors});
-    document.querySelector(".sizeOptions").innerHTML = sizesCompiler({availSizes:stock.sizes});
-    document.querySelector("#max").min = stock.minPrice; document.querySelector("#min").min = stock.minPrice;
-    document.querySelector("#max").max = stock.maxPrice; document.querySelector("#min").max = stock.maxPrice;
-    document.querySelector("#min").value = stock.minPrice; document.querySelector("#max").value = stock.maxPrice;
-    document.querySelector(".main_space").innerHTML = stockCompiler({shoe:stock.shoes});
-  })
+    if(Object.keys(stock).length !== 0){
+      document.querySelector("#brandList").innerHTML = compiledBrandOptions({shoeBrand:stock.availBrands});
+      document.querySelector("#colorList").innerHTML = compiledColorOptions({shoeColor:stock.availColors});
+      document.querySelector(".sizeOptions").innerHTML = sizesCompiler({availSizes:stock.sizes});
+      document.querySelector("#max").min = stock.minPrice; document.querySelector("#min").min = stock.minPrice;
+      document.querySelector("#max").max = stock.maxPrice; document.querySelector("#min").max = stock.maxPrice;
+      document.querySelector("#min").value = stock.minPrice; document.querySelector("#max").value = stock.maxPrice;
+      document.querySelector(".shoeDisplay").innerHTML = stockCompiler({shoe:stock.shoes});
+    }
+  });
 }
 displayStock();
 //******************************************************************************
@@ -115,7 +117,7 @@ function filterShoes() {
     type:"get"
   }).done(function(shoes) {
     console.log(shoes);
-      document.querySelector(".main_space").innerHTML = stockCompiler({shoe:shoes});
+      document.querySelector(".shoeDisplay").innerHTML = stockCompiler({shoe:shoes});
   });
 }
 //****************************************************************************
@@ -127,14 +129,14 @@ function buyShoe(shoeId){
     url:"http://localhost:3000/api/shoesId/"+shoeId,
     type:"get"
   }).done(function(shoe) {
-    var sizes = JSON.parse(shoe.size);
+    var sizes = shoe.size;
     shoeInFocus.sizes = sizes;
     shoeInFocus.shoe = shoe;
-    availSizes = Object.keys(sizes);
+    availSizes = Object.keys(shoe.size);
     sizeFocus = document.querySelector(".sizeOptions").value;
     if(sizeFocus == "") sizeFocus = availSizes[0];
-    in_stock = sizes[sizeFocus];
-    document.querySelector("#shoe").innerHTML = singleShoe({shoe, availSizes, in_stock, totalPrice:shoe.price, sizeFocus});
+    in_stock = shoe.size[sizeFocus];
+    document.querySelector("#shoe").innerHTML = singleShoe({shoe, availSizes, in_stock, totalPrice:shoe.price});
     document.querySelector("#sizeOptions").value = sizeFocus;
   });
 }
@@ -167,11 +169,16 @@ function updateStock() {
 }
 //***************************************************************************
   function toggleDisplay(id) {
-  if(document.querySelector(id).style.display == "none"){
-    document.querySelector(id).style.display = "block";
-  }else {
-    document.querySelector(id).style.display = "none";
-  }
+    expectedTriggers = ["cancelSingle","buyBtn","singleShoe","addStock","cancel"];
+    if(!event || expectedTriggers.indexOf(event.srcElement.id) != -1){
+      if(document.querySelector(id).style.display == "none"){
+        document.querySelector(id).style.display = "block";
+      }else {
+        document.querySelector(id).style.display = "none";
+      }
+    }else {
+      console.log(event.srcElement);
+    }
 }
 toggleDisplay("#newStock");
 toggleDisplay("#singleShoe");

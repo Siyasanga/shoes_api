@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Shoe Catalogue</title>
+    <script src="handlebars-v4.0.5.js"></script>
+    <link rel="stylesheet" href="shoe_catalogue.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <nav>
+      <h1>Welcome to Cwenga's Designer Shoe Store</h1>
+      <button type="button" onclick="toggleDisplay('#newStock')" id="addStock" name="button">ADD STOCK</button>
+    </nav>
+    <div class="wrapper">
+      <div id="newStock">
+          <div class="inp">
+            <label for="brand">Brand:</label>
+            <input type="text" id="brand" name="brand" required placeholder="Enter brand name">
+            <p class="error" style="display:none" id="errBrand">brand name is required</p>
+          </div>
+          <div class="inp">
+            <label for="color">Color:</label>
+            <input type="text" id="color" name="color" placeholder="Enter shoe color">
+            <p class="error" style="display:none" id="errColor">shoe color is required</p>
+          </div>
+          <div class="inp">
+            <label for="sizes">Avalable sizes:</label>
+            <input type="text" id="sizes" name="sizes" placeholder="Enter size:quantify pair, e.g: 5:10,6:15" style="width:240px"><br>
+            <p class="error" style="display:none" id="errSize">please ensure size:quantity pairs are comma separated</p>
+          </div>
+          <div class="inp">
+            <label for="sex">Sex:</label>
+            <input type="text" id="sex" name="sex" placeholder="Enter sex type e.g Male">
+            <p class="error" style="display:none" id="errSex">Sex is a required field</p>
+          </div>
+          <div class="inp">
+            <label for="price">Price: R</label>
+            <input type="number" id="price" name="price" placeholder="Enter shoe price" style="width:120px">
+            <p class="error" style="display:none" id="errColor">shoe price is a required field</p>
+          </div>
+          <div class="inp">
+            <label for="image">Enter image url of the shoe:</label>
+            <input type="text" id="image" name="image">
+            <p class="error" style="display:none" id="errImage">Don't forget to upload the picture</p>
+          </div>
+          <br>
+          <button id="submit" onclick="captureNewShoe()" name="button">Submit Stock</button>
+          <button id="cancel" name="button" onclick="toggleDisplay('#newStock')">Cancel</button>
+      </div>
+      <div class="aside">
+        <h2>Refine results:</h2>
+        <div>
+          <li class="sizes">
+            <label for="size"><h3 class="inline">Size:</h3>
+                <select class="sizeOptions" onchange="filterShoes()">
+              </select>
+            </label>
+          </li>
+          <li class="brands" id="brands">
+            <h3 class="brandHeading">Brands</h3>
+            <div id="brandList">
+            </div>
+          </li>
+          <li class="colors" id="colors"><h3>Color</h3>
+            <div id="colorList">
+            </div>
+          </li>
+          <li><h3>Price Range</h3>
+            <div class="panel">
+              R<input id="min" class="limits" default value="0" style="width:55px;height:20px" onkeyup="filterShoes()" onchange="filterShoes()" type="number" name="min" min="0"> --- R<input class="limits" id="max"  max="20000" value="10000" onkeyup="filterShoes()" onchange="filterShoes()" style="width:55px;height:20px" name="max" type="number">
+            </div>
+          </li>
+        </div>
+      </div>
+      <div class="main">
+        <div id="singleShoe" onclick="toggleDisplay('#singleShoe')">
+          <!-- This div will be the transparent overlay to put focus on the clicked shoe -->
+          <script id="singleView" type="text/x-handlebars-template">
+            <img class="image" src="{{shoe.shoeImgUrl}}" alt="picture of this {{brand}} shoe">
+            <p class="shoeDetails">
+              Brand: <span class="brand">{{shoe.brand}}</span><br>
+              Color: <span class="color">{{shoe.color}}</span><br>
+              Price: R<span class="price">{{shoe.price}}</span><br>
+              Select size: <select id="sizeOptions" onchange="pairs4size()">
+                {{#each availSizes}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+              </select><br>
+              Pairs available for this size: <span id="in_stock">{{in_stock}}</span><br>
+              How many pairs you want? <input type="number" onchange="calcTotPrice()" id="stock_limit"min="1" max="{{in_stock}}"name="" value="1"><br>
+              Totol Price : R<span id="totalPrice">{{totalPrice}}</span>
+            </p>
+            <button id="buyBtn" onclick="updateStock()" value="{{shoe._id}}">Buy</button>
+            <button id="cancelSingle" name="button">Cancel</button>
+          </script>
+          <div id="shoe">
+            <!-- This is where the single shoe that is clicked on will be displayed -->
+          </div>
+        </div>
+        <script id="shoe-template" type="text/x-handlebars-template">
+          {{#each shoe}}
+          <div class="shoe">
+            <img class="image" src="{{shoeImgUrl}}" alt="picture of this shoe">
+            <p class="info">
+              Brand: <span class="brand">{{brand}}</span><br>
+              Color: <span class="color">{{color}}</span><br>
+              Price: R<span class="price">{{price}}</span><br>
+              <!--Stock Available: <span class="stock">20</span><br>-->
+              <!-- Avail. sizes: <span class="size">{{size}}</span> -->
+            </p>
+            <button id="buyBtn" onclick="buyShoe('{{_id}}')">Buy</button>
+          </div>
+          {{/each}}
+        </script>
+        <div class="shoeDisplay">
+          <!-- This is where all the shoes will be displayed -->
+        </div>
+      </div>
+    </div>
+    <!-- All my template scripts -->
+    <script id="availSizes" type="text/x-handlebars-template">
+      <option value="">All-sizes</option>
+      {{#each availSizes}}
+      <option value="{{this}}" >{{this}}</option>
+      {{/each}}
+    </script>
+    <script id="colorOptions" type="text/x-handlebars-template">
+      {{#each shoeColor}}
+      <div class="colorOption">
+        <input class="check colorFilter" onclick="filterShoes()" value="{{this}}" id="{{this}}" type="checkbox">
+        <label for="{{this}}" class="Color">{{this}}</label>
+      </div>
+      {{/each}}
+    </script>
+    <script id="brandOptions" type="text/x-handlebars-template">
+      {{#each shoeBrand}}
+      <div class="brandOption">
+        <input class="check brand"  onclick="filterShoes()" value="{{this}}" id="{{this}}" type="checkbox">
+        <label for="{{this}}" class="Brand">{{this}}</label>
+      </div>
+      {{/each}}
+    </script>
+
+
+  </body>
+  <script src="shoe_catalogue.js" charset="utf-8"></script>
+</html>

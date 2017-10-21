@@ -29,16 +29,13 @@ function getOptions(property, stock) {
 } // End of getOptions()
 function getAvailSizes(shoes) {
   var availSizes = [];
-    if(shoes.length == 1){
-      availSizes = Object.keys(shoes[0].size);
-    }else {
-      shoes.forEach(function(currentShoe){
-        sizes = Object.keys(currentShoe.size);
-        for(i in sizes){
-          if(availSizes.indexOf(sizes[i]) == -1) availSizes.push(sizes[i]);
-        }
-      });
+  shoes.forEach(function(currentShoe){
+    sizes = JSON.parse(currentShoe.size);
+    for(i in sizes){
+      if(availSizes.indexOf(i) == -1) availSizes.push(i);
     }
+    // if()
+  });
   return availSizes;
 }
 function setStock(cb){
@@ -76,27 +73,25 @@ app.get("/api/shoes/brand/:brandName",function(req, res) {
 // Building a mega search feature
 app.get("/api/filterShoes/:queryString",function(req, res) {
   // expecting queryString to be like: ["Bronx","Gucci","Converse"],["Black","Blue","Pink"],[0,350];
+  console.log(req.params.queryString);
   var filteringOptions =  JSON.parse(req.params.queryString);
-  console.log(filteringOptions);
   selectedBrands = stock.availBrands;
   if(filteringOptions[0].length !== 0) selectedBrands = filteringOptions[0];
   selectedColors = stock.availColors;
   if(filteringOptions[1].length !== 0) selectedColors = filteringOptions[1];
   priceRange = {"$gt":stock.minPrice-1, "$lt":stock.maxPrice+1};
+  console.log(priceRange);
   if(filteringOptions[2].length !== 0){
     priceRange.$gt = filteringOptions[2][0]-1;
     priceRange.$lt = filteringOptions[2][1]+1;
   }
-  size = stock.sizes;
-  if(filteringOptions[3].length !== 0){
-    size = []; size[0] = filteringOptions[3];
-  }
-  console.log(size);
+  size = "";
+  if(filteringOptions[3].length !== 0) size = size = '\\"'+filteringOptions[3]+'\\":';
   database.find({
     brand:{$in:selectedBrands},
     color:{$in:selectedColors},
-    $or:{"size.10":{$gt:0}}
-    }, //size:{$regex: size}
+    price:priceRange,
+    size:{$regex: size}},
     function(err,shoes) {
       if(err) console.log("Error finding shoes by brand name:\n"+err);
       else res.json(shoes);
@@ -139,7 +134,6 @@ app.post("/api/shoes/sold/:shoeId",function(req, res) {
 }); // end of post
 // Add new shoe to stock
 app.post("/api/shoes",function(req, res) {
-  req.body.size = JSON.parse(req.body.size)
   var newShoe = new database(req.body);
   newShoe.save(function(err,doc) {
     if(err) console.log("Error saving the new shoe:\n"+err);

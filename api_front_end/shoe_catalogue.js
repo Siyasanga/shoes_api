@@ -129,13 +129,13 @@ function buyShoe(shoeId){
     url:"http://localhost:3000/api/shoesId/"+shoeId,
     type:"get"
   }).done(function(shoe) {
-    var sizes = shoe.size;
+    var sizes = JSON.parse(shoe.size);
     shoeInFocus.sizes = sizes;
     shoeInFocus.shoe = shoe;
-    availSizes = Object.keys(shoe.size);
+    availSizes = Object.keys(sizes);
     sizeFocus = document.querySelector(".sizeOptions").value;
     if(sizeFocus == "") sizeFocus = availSizes[0];
-    in_stock = shoe.size[sizeFocus];
+    in_stock = sizes[sizeFocus];
     document.querySelector("#shoe").innerHTML = singleShoe({shoe, availSizes, in_stock, totalPrice:shoe.price});
     document.querySelector("#sizeOptions").value = sizeFocus;
   });

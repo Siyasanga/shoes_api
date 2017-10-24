@@ -30,13 +30,15 @@ function getOptions(property, stock) {
 } // End of getOptions()
 function getAvailSizes(shoes) {
   var availSizes = [];
-  shoes.forEach(function(currentShoe){
-    sizes = JSON.parse(currentShoe.size);
-    for(i in sizes){
-      if(availSizes.indexOf(i) == -1) availSizes.push(i);
-    }
-    // if()
-  });
+  if(shoes.length !== 0){
+    shoes.forEach(function(currentShoe){
+      sizes = JSON.parse(currentShoe.size);
+      for(i in sizes){
+        if(availSizes.indexOf(i) == -1) availSizes.push(i);
+      }
+      // if()
+    });
+  }
   return availSizes;
 }
 function setStock(cb){

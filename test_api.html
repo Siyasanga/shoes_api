@@ -10,12 +10,12 @@
 <body>
   <button id="test" type="button" name="button">TEST</button>
   <div class="display">
-
+    Hello
   </div>
 </body>
 <script type="text/javascript">
-  $("#test").click(function() {
-
+  // $("#test").click(function() {
+console.log("hello");
     var stock = [
       {
         brand:"Bronx",
@@ -201,19 +201,20 @@
       }];
 
     // console.log(JSON.stringify({"7":6,"8":5,"9":5,"6":7,"5":6}).includes('"5":'));
-    // stock.forEach(function(current) {
-    //     var shoe = {};
-    //     shoe.color = current.color;
-    //     shoe.brand = current.brand;
-    //     shoe.price = current.price;
-    //     shoe.size = JSON.stringify({"7":6,"8":5,"9":5,"6":7,"5":6});
-    //     shoe.shoeImgUrl = current.img;
-    //     $.ajax({
-    //       url:"http://localhost:3000/api/shoes",
-    //       type:"post",
-    //       data:shoe
-    //     });
-    // });
+    stock.forEach(function(current) {
+        console.log("In forEach");
+        var shoe = {};
+        shoe.color = current.color;
+        shoe.brand = current.brand;
+        shoe.price = current.price;
+        shoe.size = JSON.stringify({"7":6,"8":5,"9":5,"6":7,"5":6});
+        shoe.shoeImgUrl = current.img;
+        $.ajax({
+          url:"http://localhost:3000/api/shoes",
+          type:"post",
+          data:shoe
+        });
+    });
     // console.log(stockPromises);
   // console.log(stockPromises);
   $("#test").click(function() {
@@ -224,7 +225,7 @@
             console.log(result);
           });
         })
-});
+// });
   // $("#test").click(function() {
   //       $.ajax({
   //         url: "http://localhost:3000/api/shoes/sold/59d5ec8aff4aaf39ed09a9e6",

@@ -5,7 +5,7 @@ var sizesCompiler = Handlebars.compile(document.querySelector("#availSizes").inn
 var singleShoe = Handlebars.compile(document.querySelector("#singleView").innerHTML);
 function displayStock() {
   $.ajax({
-    url: "http://localhost:3000/api/shoes",
+    url: "https://siya-shoe-api.herokuapp.com/api/shoes",
     type:"get"
   }).done(function(stock) {
     if(Object.keys(stock).length !== 0){
@@ -40,7 +40,7 @@ function captureNewShoe() {
       // stock.push(newStock(brand,color,cost,sizes,shoeImgUrl));
     console.log(newShoe);
     $.ajax({
-      url:"http://localhost:3000/api/shoes",
+      url:"https://siya-shoe-api.herokuapp.com/api/shoes",
       type:"post",
       data:newShoe
     }).done(function(result) {
@@ -113,7 +113,7 @@ function filterShoes() {
   queryString = "["+JSON.stringify(activeBrands)+","+JSON.stringify(activeColors)+","+JSON.stringify(priceRange)+",\""+selectedSize+"\"]";
   console.log(queryString);
   $.ajax({
-    url:"http://localhost:3000/api/filterShoes/"+queryString,
+    url:"https://siya-shoe-api.herokuapp.com/api/filterShoes/"+queryString,
     type:"get"
   }).done(function(shoes) {
     console.log(shoes);
@@ -126,7 +126,7 @@ function buyShoe(shoeId){
   console.log(shoeId);
   toggleDisplay("#singleShoe");
   $.ajax({
-    url:"http://localhost:3000/api/shoesId/"+shoeId,
+    url:"https://siya-shoe-api.herokuapp.com/api/shoesId/"+shoeId,
     type:"get"
   }).done(function(shoe) {
     var sizes = JSON.parse(shoe.size);
@@ -158,7 +158,7 @@ function updateStock() {
   console.log(shoeInFocus.sizes);
   console.log(event.srcElement.value);
   $.ajax({
-    url: "http://localhost:3000/api/shoes/sold/"+event.srcElement.value,
+    url: "https://siya-shoe-api.herokuapp.com/api/shoes/sold/"+event.srcElement.value,
     type: "post",
     data: shoeInFocus.sizes
   }).done(function(updatedShoe) {

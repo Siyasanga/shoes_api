@@ -5,6 +5,7 @@ var app = express();
 app.use(body.urlencoded({
   extended:false
 }));
+app.use(express.static("api_front_end"));
 // app.use(body.json());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin","*");
